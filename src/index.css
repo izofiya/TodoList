@@ -7,8 +7,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+#spanWrapper {
+  background-color: #e7efec;
+  width: 95% ;
+}
+#wrapper {
+  margin: 80px auto;
+  width: 60%;
+}
+#iconAdd {
+  position: sticky;
+  bottom: 0;
 }
