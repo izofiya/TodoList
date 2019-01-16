@@ -1,6 +1,7 @@
 import React from 'react';
 import 'material-design-icons/iconfont/material-icons.css';
 import 'materialize-css/dist/css/materialize.min.css';
+import {Input} from './Input.js';
 
 export const MenuTodoList = (props) => (
     <ul className="collection with-header">
@@ -9,7 +10,7 @@ export const MenuTodoList = (props) => (
                 key={index}
                 className="collection-item">
                 <label>
-                    <input type="checkbox" className="filled-in"/>
+                    <Input taskId={task.id} taskIsDone={task.isDone}/>
                     <span id="spanWrapper">{task.description}</span>
                 </label>
                 <a href="#!" className="secondary-content">
@@ -19,3 +20,4 @@ export const MenuTodoList = (props) => (
         ))}
     </ul>
   );
+  

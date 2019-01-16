@@ -4,7 +4,6 @@ import {MenuTodoList} from './MenuTodoList.js';
 import 'material-design-icons/iconfont/material-icons.css';
 import 'materialize-css/dist/css/materialize.min.css';
 
-
 export class TodoList extends React.Component {
     constructor(props) {
         super(props);
