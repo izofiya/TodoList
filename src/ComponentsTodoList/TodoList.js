@@ -1,8 +1,7 @@
 import React from 'react';
-import {Button} from 'react-materialize';
 import {MenuTodoList} from './MenuTodoList.js';
-import 'material-design-icons/iconfont/material-icons.css';
-import 'materialize-css/dist/css/materialize.min.css';
+// import 'material-design-icons/iconfont/material-icons.css';
+// import 'materialize-css/dist/css/materialize.min.css';
 
 export class TodoList extends React.Component {
     constructor(props) {
@@ -27,7 +26,7 @@ export class TodoList extends React.Component {
         return (
             <div id="wrapper">
                 <MenuTodoList tasks={this.state.tasks}/>
-                <Button id="iconAdd" className="z-depth-5" floating size="large" color="red" icon="add"></Button>
+                <button className="iconAdd">ADD</button>
             </div>
         )
     }

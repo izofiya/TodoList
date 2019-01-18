@@ -11,15 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-#spanWrapper {
+#inputWrapper {
   background-color: #e7efec;
-  width: 95% ;
+  width: 90% ;
+  display: inline-block;
 }
 #wrapper {
   margin: 80px auto;
   width: 60%;
 }
-#iconAdd {
+.iconAdd {
   position: sticky;
   bottom: 0;
+}
+#formId {
+  background-color: #a7e67d;
+  width: 95% ;
 }

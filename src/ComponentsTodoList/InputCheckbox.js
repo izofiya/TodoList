@@ -1,8 +1,8 @@
 import React from 'react';
-import 'material-design-icons/iconfont/material-icons.css';
-import 'materialize-css/dist/css/materialize.min.css';
+// import 'material-design-icons/iconfont/material-icons.css';
+// import 'materialize-css/dist/css/materialize.min.css';
 
-export class Input extends React.Component {
+export class InputCheckbox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,11 +13,10 @@ export class Input extends React.Component {
     }
     handleChangeChecked (event) {
         this.setState({
-          checked: event.target.checked
+            checked: event.target.checked
         });
-        console.log('checked: ' + this.state.checked + event.target.checked);
     }
-    componentDidUpdate () {
+    componentDidUpdate() {
         fetch('http://localhost:3002/api/tasks/' + this.props.taskId,
         {method: 'PUT', body: JSON.stringify({isDone: this.state.checked}),
          headers: {'content-type': 'application/json'}}).then(response => response.json()).then(taskСhanged => {
@@ -32,7 +31,7 @@ export class Input extends React.Component {
             return "Loading..."
         }
         return (
-            <input type="checkbox" className="filled-in" defaultChecked={this.props.taskIsDone} onChange={this.handleChangeChecked}/>
+            <input type="checkbox" defaultChecked={this.props.taskIsDone} onChange={this.handleChangeChecked}/>
         )
     }
 }
