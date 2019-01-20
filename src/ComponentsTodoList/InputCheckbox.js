@@ -6,19 +6,17 @@ export class InputCheckbox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
             isLoading: false
         }
         this.handleChangeChecked = this.handleChangeChecked.bind(this);
+        this.makeRequest = this.makeRequest.bind(this);
     }
     handleChangeChecked (event) {
-        this.setState({
-            checked: event.target.checked
-        });
+        this.makeRequest(event.target.checked);
     }
-    componentDidUpdate() {
-        fetch('http://localhost:3002/api/tasks/' + this.props.taskId,
-        {method: 'PUT', body: JSON.stringify({isDone: this.state.checked}),
+    makeRequest(checked) {
+       fetch('http://localhost:3002/api/tasks/' + this.props.taskId,
+        {method: 'PUT', body: JSON.stringify({isDone: checked}),
          headers: {'content-type': 'application/json'}}).then(response => response.json()).then(taskСhanged => {
             this.setState({
             isLoading: false,

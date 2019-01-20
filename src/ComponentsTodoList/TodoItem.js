@@ -4,25 +4,29 @@ export class TodoItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoading: false,
             changeItem: this.props.taskDescription
         }
         this.onChangeItem = this.onChangeItem.bind(this);
+        this.makeRequest = this.makeRequest.bind(this);
     }
     onChangeItem = (event) => {
-        this.setState({
-            changeItem: event.target.value
-        });
+        this.makeRequest(event.target.value)
     }
-    componentDidUpdate() {
+    makeRequest(taskValue) {
         fetch('http://localhost:3002/api/tasks/' + this.props.taskId,
-        {method: 'PUT', body: JSON.stringify({description: this.state.changeItem}),
+        {method: 'PUT', body: JSON.stringify({description: taskValue}),
          headers: {'content-type': 'application/json'}}).then(response => response.json()).then(taskСhanged => {
             this.setState({
-            changeItem: taskСhanged.description
+                isLoading: false,
+                changeItem: taskСhanged.description
             });
         });
     }
     render () {
+        if(this.state.isLoading) {
+            return "Loading..."
+        }
         return (
             <label>
                 <input id="inputWrapper"
@@ -30,7 +34,6 @@ export class TodoItem extends React.Component {
                 value={this.state.changeItem}
                 onChange={this.onChangeItem}
                 />
-                <button>delete</button>
             </label>
         )
     }
