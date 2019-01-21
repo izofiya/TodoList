@@ -1,7 +1,6 @@
 import React from 'react';
 import {InputCheckbox} from './InputCheckbox.js';
 import {TodoItem} from './TodoItem.js';
-// import {ButtonDelete} from './ButtonDelete.js';
 // import 'material-design-icons/iconfont/material-icons.css';
 // import 'materialize-css/dist/css/materialize.min.css';
 
@@ -53,14 +52,16 @@ export class TodoList extends React.Component {
             <div id="wrapper">
                 <form id="formId" onSubmit={this.handleSubmit}>
                 {this.state.tasks.map((task) => (
-                    <div key={task.id}>
+                    <div id="divAfterForm" key={task.id}>
                         {!task ? null : <InputCheckbox taskId={task.id} taskIsDone={task.isDone}/>}
                         {!task ? null : <TodoItem taskDescription={task.description} taskId={task.id}/>}
-                        {!task ? null : <button onClick={() => this.onDelete(task.id)}>delete</button>}
+                        {!task ? null : <button className="classButtonDelete" onClick={() => this.onDelete(task.id)}>
+                        <img className="classImgDelete" alt="delete" src="https://api.icons8.com/download/a4650c63e77eb297132bc8a67be5abc3797e5e1f/Android/PNG/512/Industry/trash-512.png"/>
+                        </button>}
                     </div>
                 ))}
             </form>
-                <button className="iconAdd">ADD</button>
+                <button className="buttonAdd">+</button>
             </div>
         )
     }

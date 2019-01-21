@@ -29,7 +29,7 @@ export class InputCheckbox extends React.Component {
             return "Loading..."
         }
         return (
-            <input type="checkbox" defaultChecked={this.props.taskIsDone} onChange={this.handleChangeChecked}/>
+            <input className="inputCheckbox" type="checkbox" defaultChecked={this.props.taskIsDone} onChange={this.handleChangeChecked}/>
         )
     }
 }

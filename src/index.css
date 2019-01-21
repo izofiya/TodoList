@@ -13,18 +13,41 @@ code {
 }
 #inputWrapper {
   background-color: #e7efec;
-  width: 90% ;
+  width: 80%;
+  height: 20px;
   display: inline-block;
 }
 #wrapper {
   margin: 80px auto;
   width: 60%;
+  
 }
-.iconAdd {
+.buttonAdd {
   position: sticky;
   bottom: 0;
+  background-color: #3abf88;
+  border: none;
+  color: white;
+  padding: 13px;
+  font-size: 27px;
+  margin: 20px 2px;
+  border-radius: 50%;
 }
 #formId {
-  background-color: #a7e67d;
-  width: 95% ;
+  background-color: #b0d2c4;
+  width: 95%;
+  text-align: center;
+  padding: 30px;
+}
+.inputCheckbox {
+  height: 21px;
+  width: 26px;
+}
+.classButtonDelete {
+  margin-left: 20px;
+  margin-top: 15px;
+  background-color: #3abf88;
+}
+.classImgDelete {
+  height: 30px;
 }
