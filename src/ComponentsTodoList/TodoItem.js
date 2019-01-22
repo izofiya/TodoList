@@ -29,7 +29,7 @@ export class TodoItem extends React.Component {
         }
         return (
             <label>
-                <input id="inputWrapper"
+                <input className="inputWrapper"
                 type="text"
                 value={this.state.changeItem}
                 onChange={this.onChangeItem}
