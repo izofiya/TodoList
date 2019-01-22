@@ -16,8 +16,10 @@ export class TodoList extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.todoListChanged = this.todoListChanged.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
     }
     componentDidMount () {
+        window.addEventListener('keydown', this.onKeyDown);
         fetch('http://localhost:3002/api/tasks').then(response => response.json()).then(tasks => {
             this.setState({
             tasks,
@@ -25,6 +27,13 @@ export class TodoList extends React.Component {
             });
         });
     }
+    onKeyDown(evt) {
+        if(evt.key === 'A') {
+            this.setState({
+                isAdd: true
+            });
+        }
+      }
     handleSubmit(event) {
         event.preventDefault();
       }
@@ -42,6 +51,9 @@ export class TodoList extends React.Component {
         this.todoListChanged(task);
     }
     onCloseModal(event, tasksFromModal) {
+        if(!tasksFromModal) {
+            alert("You didn't write a task!");
+        }
         this.setState({
             isAdd: false,
             tasks: tasksFromModal
