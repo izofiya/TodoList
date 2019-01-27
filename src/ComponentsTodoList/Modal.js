@@ -44,8 +44,8 @@ export class Modal extends React.Component {
     }
     render () {
         return (
-            <div className="coverDiv">
-                <div className="promptFormContainer">
+            <div ref={(div) => {this.myDiv = div}} className="coverDiv">
+                <div onClick={() => this.props.onClickDiv(this.myDiv)} className="promptFormContainer">
                     <form className="promptForm">
                     <div>
                         Add new task

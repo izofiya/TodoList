@@ -9,7 +9,8 @@ export class TodoList extends React.Component {
         this.state = {
             tasks: '',
             isLoading: true,
-            isAdd: false
+            isAdd: false,
+            myDiv: false
         }
         this.onDelete = this.onDelete.bind(this);
         this.makeRequestDelete = this.makeRequestDelete.bind(this);
@@ -17,6 +18,7 @@ export class TodoList extends React.Component {
         this.todoListChanged = this.todoListChanged.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
+        this.onClickDiv = this.onClickDiv.bind(this);
     }
     componentDidMount () {
         window.addEventListener('keydown', this.onKeyDown);
@@ -60,6 +62,13 @@ export class TodoList extends React.Component {
         });
         this.handleSubmit(event);
     }
+    onClickDiv (myDiv) {
+        if(myDiv) {
+        this.setState({
+            isAdd: false
+        });
+        }
+     }
     makeRequestDelete(taskDelete) {
         fetch('http://localhost:3002/api/tasks/' + taskDelete.id,
        {method: 'DELETE'});
@@ -71,6 +80,7 @@ export class TodoList extends React.Component {
         return (
             <div className="wrapper">
             {this.state.isAdd ? <Modal
+                onClickDiv={this.onClickDiv}
                 tasks={this.state.tasks}
                 onCloseModal={this.onCloseModal}
             /> : null}
