@@ -9,8 +9,7 @@ export class TodoList extends React.Component {
         this.state = {
             tasks: '',
             isLoading: true,
-            isAdd: false,
-            myDiv: false
+            isAdd: false
         }
         this.onDelete = this.onDelete.bind(this);
         this.makeRequestDelete = this.makeRequestDelete.bind(this);
@@ -18,7 +17,8 @@ export class TodoList extends React.Component {
         this.todoListChanged = this.todoListChanged.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
-        this.onClickDiv = this.onClickDiv.bind(this);
+        this.onFormClick = this.onFormClick.bind(this);
+        this.handleFormRef = this.handleFormRef.bind(this);
     }
     componentDidMount () {
         window.addEventListener('keydown', this.onKeyDown);
@@ -31,9 +31,7 @@ export class TodoList extends React.Component {
     }
     onKeyDown(evt) {
         if(evt.key === 'A') {
-            this.setState({
-                isAdd: true
-            });
+            this.setState({isAdd: true});
         }
       }
     handleSubmit(event) {
@@ -61,14 +59,20 @@ export class TodoList extends React.Component {
             tasks: tasksFromModal
         });
         this.handleSubmit(event);
-    }
-    onClickDiv (myDiv) {
-        if(myDiv) {
-        this.setState({
-            isAdd: false
-        });
+    }    
+    onFormClick = (event) => {
+        if (event.target.contains(this.form)) {
+            this.setState ({isAdd: false});
+        } 
+    };
+    handleFormRef = (node) => {
+        this.form = node;
+        if(node) {
+            document.addEventListener('click', this.onFormClick);
+        } else {
+            document.removeEventListener('click', this.onFormClick);
         }
-     }
+    };
     makeRequestDelete(taskDelete) {
         fetch('http://localhost:3002/api/tasks/' + taskDelete.id,
        {method: 'DELETE'});
@@ -80,7 +84,8 @@ export class TodoList extends React.Component {
         return (
             <div className="wrapper">
             {this.state.isAdd ? <Modal
-                onClickDiv={this.onClickDiv}
+                handleSubmit={this.handleSubmit}
+                onRef={this.handleFormRef}
                 tasks={this.state.tasks}
                 onCloseModal={this.onCloseModal}
             /> : null}
