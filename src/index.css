@@ -16,6 +16,7 @@ code {
   width: 80%;
   height: 20px;
   display: inline-block;
+  font-size: 120%;
 }
 .wrapper {
   margin: 80px auto;
@@ -103,4 +104,9 @@ code {
   background: #3abf88;
   font-size: 125%;
 }
-
+.classSelect {
+  font-size: 120%;
+  width: 40%;
+  background-color: #e7efec;
+  display: inline-block;
+}
