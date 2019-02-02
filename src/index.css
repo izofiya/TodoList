@@ -109,4 +109,7 @@ code {
   width: 40%;
   background-color: #e7efec;
   display: inline-block;
+  border: none;
+  padding: 5px;
+  margin: 5px;
 }

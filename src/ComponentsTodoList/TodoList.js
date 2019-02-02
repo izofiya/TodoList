@@ -3,6 +3,7 @@ import { InputCheckbox } from './InputCheckbox.js';
 import { TodoItem } from './TodoItem.js';
 import { Modal } from './Modal.js';
 import { Select } from './Select.js';
+import { FilterByText } from './FilterByText.js';
 
 export class TodoList extends React.Component {
     constructor(props) {
@@ -13,7 +14,10 @@ export class TodoList extends React.Component {
             isAdd: false,
             valueInputModal: '',
             tasksFromModal: '',
-            newTask: ''
+            newTask: '',
+            valueFilterByText: '',
+            arrTasksIsDoneForFilter: ''
+
         }
         this.options = ['Show all', 'Show done', 'Show undone'];
         this.onDelete = this.onDelete.bind(this);
@@ -25,28 +29,31 @@ export class TodoList extends React.Component {
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
         this.handleFormClick = this.handleFormClick.bind(this);
         this.onClickShowIsDone = this.onClickShowIsDone.bind(this);
-        this.makeRequestIsDone = this.makeRequestIsDone.bind(this);
+        this.makeRequestIsDoneForFilter = this.makeRequestIsDoneForFilter.bind(this);
         this.onChangeInputModal= this.onChangeInputModal.bind(this);
         this.todoListChengedPost = this.todoListChengedPost.bind(this);
         this.onAddNewTask = this.onAddNewTask.bind(this);
         this.makeRequestPost = this.makeRequestPost.bind(this);
+        this.onChangeFilterByText = this.onChangeFilterByText.bind(this);
+        this.filteredByText = this.filteredByText.bind(this);
     }
     componentDidMount () {
         window.addEventListener('keydown', this.onKeyDown);
         fetch('http://localhost:3002/api/tasks').then(response => response.json()).then(tasks => {
             this.setState({
             tasks,
+            arrTasksIsDoneForFilter: tasks,
             isLoading: false
             });
         });
     }
+    handleSubmit(event) {
+        event.preventDefault();
+      }
     onKeyDown(evt) {
         if(evt.key === 'A') {
             this.setState({isAdd: true});
         }
-      }
-    handleSubmit(event) {
-        event.preventDefault();
       }
     todoListChanged (taskChanged) {
         const arrTasks = this.state.tasks.map(task => task.id === taskChanged.id ? '' : task);
@@ -54,6 +61,7 @@ export class TodoList extends React.Component {
            tasks: [...arrTasks]
         });
       }
+    // FUNCTIONS FOR DELETE !!!  
     onDelete(task) {
         this.setState({
             taskId: task.id
@@ -61,6 +69,11 @@ export class TodoList extends React.Component {
         this.makeRequestDelete(task);
         this.todoListChanged(task);
     }
+    makeRequestDelete(taskDelete) {
+        fetch('http://localhost:3002/api/tasks/' + taskDelete.id,
+       {method: 'DELETE'});
+    }
+    // FUNCTIONS FOR MODAL !!!
     onCloseModal(event) {
         this.setState({
             isAdd: false
@@ -72,13 +85,23 @@ export class TodoList extends React.Component {
     }
     todoListChengedPost () {
         const arrTasks = this.state.tasks.map(task => task.id === this.state.newTask.id ? this.state.newTask : task);
-        this.setState({tasks: [...arrTasks]});
+        this.setState({
+            tasks: [...arrTasks],
+            valueInputModal: ''
+        });
       }
       onAddNewTask(event) {    
         event.preventDefault();    
         this.makeRequestPost();
         this.todoListChengedPost();
-        this.setState({valueInputModal: ''})
+    }
+    makeRequestPost() {
+        fetch('http://localhost:3002/api/tasks',
+         {method: 'POST',
+         body: JSON.stringify({description: this.state.valueInputModal}),
+         headers: {'content-type': 'application/json'}}).then(response => response.json()).then(newTask => {
+            this.setState({newTask});
+        });
     }    
     handleOutsideClick (event) {
         if (this.form.contains(event.target)) {
@@ -94,8 +117,9 @@ export class TodoList extends React.Component {
             document.removeEventListener('click', this.handleOutsideClick);
         }
     };
+    // FUNCTIONS FOR FILTERS !!!
     onClickShowIsDone (event) {
-        let result = [];
+        let result;
         switch(event.target.value) {
             case this.options[0]:
                 result = this.state.tasks;
@@ -107,32 +131,47 @@ export class TodoList extends React.Component {
                 result = false;
                 break;
         }
-        this.makeRequestIsDone(result);
+        this.makeRequestIsDoneForFilter(result);
     }
-    makeRequestPost() {
-        fetch('http://localhost:3002/api/tasks',
-         {method: 'POST',
-         body: JSON.stringify({description: this.state.valueInputModal}),
-         headers: {'content-type': 'application/json'}}).then(response => response.json()).then(newTask => {
-            this.setState({newTask});
+    onChangeFilterByText (event) {
+        this.setState({
+            valueFilterByText: event.target.value
         });
+        this.filteredByText(event.target.value);
     }
-    makeRequestIsDone(result) {
-        fetch('http://localhost:3002/api/tasks').then(response => response.json()).then(tasks => {
-            if(result === true || result === false) {
-            this.setState({
-            tasks: tasks.filter(task => task.isDone === result)
+   filteredByText(valueInput) {
+        let arrFilterByTextWithFilterIsDone = this.state.arrTasksIsDoneForFilter.filter(task => {
+            return task.description.toLowerCase().indexOf(valueInput.toLowerCase()) !== -1;
             });
-            } else {
-                this.setState({
-                    tasks
-                });
-            }
-        });
+                if(!valueInput) {
+                    this.setState({
+                        tasks: this.state.arrTasksIsDoneForFilter
+                    });
+                } else {
+                    this.setState({
+                        tasks: arrFilterByTextWithFilterIsDone
+                        });
+                }
      }
-    makeRequestDelete(taskDelete) {
-        fetch('http://localhost:3002/api/tasks/' + taskDelete.id,
-       {method: 'DELETE'});
+    makeRequestIsDoneForFilter(result) {
+        fetch('http://localhost:3002/api/tasks').then(response => response.json()).then(tasks => {
+            let arrIsDone = tasks.filter(task => task.isDone === result);
+                if(result === true || result === false) {
+                    this.setState({
+                        tasks: arrIsDone,
+                        arrTasksIsDoneForFilter: arrIsDone,
+                        resultIsDone: result,
+                        valueFilterByText: ''
+                    });
+                } else {
+                    this.setState({
+                        tasks,
+                        arrTasksIsDoneForFilter: tasks,
+                        resultIsDone: result,
+                        valueFilterByText: ''
+                    });
+                }
+        });
     }
     render () {
         if(this.state.isLoading) {
@@ -153,6 +192,10 @@ export class TodoList extends React.Component {
                     <Select 
                     options={this.options}
                     onClickShowIsDone={this.onClickShowIsDone}
+                    />
+                    <FilterByText 
+                    valueFilterByText={this.state.valueFilterByText}
+                    onChangeFilterByText={this.onChangeFilterByText}
                     />
                     {this.state.tasks.map((task) => (
                         <div key={task.id}>
