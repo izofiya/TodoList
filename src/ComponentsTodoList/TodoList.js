@@ -23,7 +23,7 @@ export class TodoList extends React.Component {
         this.onDelete = this.onDelete.bind(this);
         this.makeRequestDelete = this.makeRequestDelete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.todoListChanged = this.todoListChanged.bind(this);
+        this.todoListChangedAfterDeletion = this.todoListChangedAfterDeletion.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
@@ -31,7 +31,6 @@ export class TodoList extends React.Component {
         this.onClickShowIsDone = this.onClickShowIsDone.bind(this);
         this.makeRequestIsDoneForFilter = this.makeRequestIsDoneForFilter.bind(this);
         this.onChangeInputModal= this.onChangeInputModal.bind(this);
-        this.todoListChengedPost = this.todoListChengedPost.bind(this);
         this.onAddNewTask = this.onAddNewTask.bind(this);
         this.makeRequestPost = this.makeRequestPost.bind(this);
         this.onChangeFilterByText = this.onChangeFilterByText.bind(this);
@@ -47,31 +46,31 @@ export class TodoList extends React.Component {
             });
         });
     }
-    handleSubmit(event) {
-        event.preventDefault();
-      }
     onKeyDown(evt) {
         if(evt.key === 'A') {
             this.setState({isAdd: true});
         }
       }
-    todoListChanged (taskChanged) {
+    handleSubmit(event) {
+        event.preventDefault();
+      }
+    // FUNCTIONS FOR DELETE !!!  
+    makeRequestDelete(taskDelete) {
+        fetch('http://localhost:3002/api/tasks/' + taskDelete.id,
+       {method: 'DELETE'});
+    }
+    todoListChangedAfterDeletion (taskChanged) {
         const arrTasks = this.state.tasks.map(task => task.id === taskChanged.id ? '' : task);
         this.setState({
            tasks: [...arrTasks]
         });
       }
-    // FUNCTIONS FOR DELETE !!!  
     onDelete(task) {
         this.setState({
             taskId: task.id
         });
         this.makeRequestDelete(task);
-        this.todoListChanged(task);
-    }
-    makeRequestDelete(taskDelete) {
-        fetch('http://localhost:3002/api/tasks/' + taskDelete.id,
-       {method: 'DELETE'});
+        this.todoListChangedAfterDeletion(task);
     }
     // FUNCTIONS FOR MODAL !!!
     onCloseModal(event) {
@@ -83,17 +82,12 @@ export class TodoList extends React.Component {
     onChangeInputModal(event) {
         this.setState({valueInputModal: event.target.value});
     }
-    todoListChengedPost () {
-        const arrTasks = this.state.tasks.map(task => task.id === this.state.newTask.id ? this.state.newTask : task);
+    onAddNewTask() {  
+        this.makeRequestPost();   
         this.setState({
-            tasks: [...arrTasks],
+            tasks: [...this.state.tasks.map(task => task.id === this.state.newTask.id ? this.state.newTask : task)],
             valueInputModal: ''
-        });
-      }
-      onAddNewTask(event) {    
-        event.preventDefault();    
-        this.makeRequestPost();
-        this.todoListChengedPost();
+        }); 
     }
     makeRequestPost() {
         fetch('http://localhost:3002/api/tasks',
